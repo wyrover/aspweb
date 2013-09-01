@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<title>90BOB.COM 提供最快的软件更新信息</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="<cms:function>GetBaseURL()</cms:function>styles/default3.css" rel="stylesheet" type="text/css" />
+
+
+<link rel="stylesheet" href="<cms:function>GetBaseURL()</cms:function>styles/thickbox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/jquery.js"></script> 
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/js4cnltreemenu.js"></script> 
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/thickbox.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/utility.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/login.js?1166278921"></script>
+
+<script type="text/javascript">
+var oInterval="";
+i = 1;
+function createindex()
+{
+	i = $("#txtBegin").val();
+	oInterval=window.setInterval("fnRefresh()", 500);			
+	$("#progress").html("开始生成......");					
+		
+	/*
+	$.get(
+		"index.asp?/host/createpagelist", 
+		function(result) {
+			
+			alert('生成首页成功！');
+			window.clearInterval(oInterval);
+			$("#progress").html("生成完毕！");	
+		}
+	);
+	
+
+	*/
+}
+
+function fnRefresh()
+{
+	
+	$.get(
+		"index.asp?/host/createpage2/" + i, 
+		function(result) {			
+			$("#progress").html(result);			
+		}
+	);	
+
+	if (i == $("#txtEnd").val())
+	{
+		window.clearInterval(oInterval);
+		$("#progress").html("生成完毕！");
+	}
+
+	i++;
+	
+}
+
+function createtable()
+{
+	$.post(
+		'index.asp?/manage/sql/create', 
+		{tablename: $("#txtTableName").val()}, 
+		function(result) {
+			alert("创建成功!");	
+			$("#tables").html(result);
+			
+		}
+	);
+}
+
+function getdetail(tablename)
+{
+	$.get(
+		"index.asp?/manage/table_detail/" + tablename, 
+		function(result) {			
+			$("#table_detail").html(result).show("slow"); 	
+		}
+	);	
+
+	$("#txtTableName").val(tablename);
+}
+
+function addfield()
+{
+	$.post(
+		'index.asp?/manage/sql/addfield', 
+		{tablename: $("#txtTableName").val(), fieldname: $("#txtfieldname").val(), fieldtype: $("#fieldtype").val(), varchar_len: $("#varchar_len").val()}, 
+		function(result) {				
+				alert(result);						
+		}
+	);
+}
+
+function modifyfield()
+{
+	$.post(
+		'index.asp?/manage/sql/modifyfield', 
+		{tablename: $("#txtTableName").val(), fieldname: $("#txtfieldname").val(), fieldtype: $("#fieldtype").val(), varchar_len: $("#varchar_len").val()}, 
+		function(result) {				
+				alert(result);						
+		}
+	);
+}
+
+function deletefield()
+{
+	$.post(
+		'index.asp?/manage/sql/deletefield', 
+		{tablename: $("#txtTableName").val(), fieldname: $("#txtfieldname").val()}, 
+		function(result) {				
+				alert(result);						
+		}
+	);
+}
+
+function sqlexecute()
+{
+	$.post(
+		'index.asp?/manage/sql_execute', 
+		{sqlexe: $("#txtsqlexe").val()}, 
+		function(result) {			
+			alert(result);			
+		}
+	);
+}
+
+
+function seleChan1(str){	
+	if(str=="varchar"){	
+		document.getElementById("fieldsize").style.display="";
+	}
+	else{
+		document.getElementById("fieldsize").style.display="none";
+	}
+}
+
+function compactDatabase()
+{
+	$.get(
+		'index.asp?/manage/database_compact', 		
+		function(result) {					
+			if (result == "1") {
+				alert("压缩成功！");	
+			}					
+		}
+	);
+}
+</script>
+
+<style type="text/css">
+#tables li {
+	float: left; width: 100px; padding: 5px;
+}
+</style>
+
+</head>
+
+<body>
+
+
+<div id="tables">
+{$tables}
+</div>
+<div class="clear">
+</div>
+
+
+
+<div id="table_detail">
+</div>
+
+<fieldset>
+	<label>表名：</label><input type="text" id="txtTableName" name="txtTableName" /><input type="button" onclick="createtable();" value="创建" /><br>
+	<label>添加或修改字段：</label><input type="text" id="txtfieldname" name="fieldname" /><select name="fieldtype" onChange="seleChan1(this.options[this.selectedIndex].value)">
+            <option value="int">长整型</option>
+			<option value="smallint">整型</option>
+			<option value="varchar">文本</option>
+			<option value="datetime">日期/日间</option>
+			<option value="memo">备注</option>
+			<option value="money">货币</option>
+			<option value="bit">是/否</option>
+          </select><div id="fieldsize" style="display:none; float:inherit;">长度：<input name="varchar_len" type="text" id="varchar_len" size="10"></div><input type="button" onclick="addfield();" value="添加" /><input type="button" onclick="modifyfield();" value="修改" /><input type="button" onclick="deletefield();" value="删除" /><br>
+	<label>执行SQL语句：</label><textarea name="txtsqlexe" cols="40" rows="4" id="txtsqlexe">在此处输入sql语句，注：请慎用此功能!</textarea><input type="button" onclick="sqlexecute();" value="执行" />
+	<br /><input type="button" value="压缩数据库" onclick="compactDatabase();" />
+</fieldset>
+
+</body>
+</html>

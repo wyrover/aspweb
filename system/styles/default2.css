@@ -1,0 +1,492 @@
+/*
+	Design by Free CSS Templates
+	http://www.freecsstemplates.org
+	Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+/* Basic */
+
+*
+{
+	margin: 0em;
+	padding: 0em;
+}
+
+body, form, img, ul, p, dl, dt, dd, h1, h2, h3, h4, h5, h6 {
+	padding: 0; margin: 0; border: 0; list-style: none;
+}
+
+h1,h2
+{
+}
+
+b
+{
+	font-family: Verdana, sans-serif;
+	font-size: 10pt;
+	font-weight: 401;
+	line-height: 18px;
+}
+
+body
+{
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 10pt;
+	color: #666;
+	background-color: #fff;
+}
+
+a
+{
+	color: rgb(0, 51, 153);
+	text-decoration: none;
+}
+
+a:hover
+{
+	color: rgb(51, 51, 51);
+	text-decoration: underline;
+}
+
+img
+{
+	border: 0px;
+}
+
+/* Outer */
+
+#outer
+{
+	padding: 0em;
+	margin: 0em;
+	width: 100%;
+}
+
+/* Header */
+
+#header
+{
+	position: relative;
+	/*background: #004778 url('images/a5.gif') bottom left repeat-x;*/
+	height: 6em;
+	padding-left: 2em;
+}
+
+#header h1
+{
+	position: absolute;
+	top: 0.8em;
+	font-size: 2.2em;
+	letter-spacing: -0.05em;
+}
+
+#header h1 a
+{
+	color: #000;
+	text-decoration: none;
+}
+
+#header h2
+{
+	position: absolute;
+	font-size: 0.8em;
+	top: 5.2em;
+	color: #000;
+}
+
+#login
+{
+	position: absolute;
+	font-size: 0.9em;
+	top: 0.8em;
+	right: 3em;	
+}
+
+#login ul
+{
+	list-style: none;
+}
+
+#login li
+{
+	display: inline;
+	padding-left: 0.5em;
+	margin-left: 0.5em;
+	border-left: dotted 1px #000;
+}
+
+#login li.first
+{
+	border: 0em;
+	margin-left: 0em;
+	padding-left: 0em;
+}
+
+#login li a
+{
+	color: rgb(0, 51, 153);
+	padding: 0.1em;
+	text-decoration: none;
+}
+
+
+#login li a:hover
+{
+	text-decoration: underline;
+}
+
+/* Menu */
+
+#menu
+{
+	position: absolute;
+	top: 4em;
+	right: 3em;
+}
+
+#menu ul
+{
+	list-style: none;
+}
+
+#menu li
+{
+	display: inline;
+	padding-left: 1.1em;
+	margin-left: 1em;
+	border-left: dotted 1px #E0E8EF;
+}
+
+#menu li.first
+{
+	border: 0em;
+	margin-left: 0em;
+	padding-left: 0em;
+}
+
+#menu li a
+{
+	color: #000;
+	padding: 0.1em;
+	text-decoration: none;
+}
+
+#menu li a:hover
+{
+	text-decoration: underline;
+}
+
+#ad
+{
+	position: absolute;
+	top: 1em;
+	left: 17em;
+}
+
+
+/* Content */
+
+#content
+{
+	line-height: 1.5em;
+}
+
+
+#content p
+{
+	margin-bottom: 1.5em;
+}
+
+#content h2,h3,h4,h5,h6
+{
+	color: #545454;
+	margin-bottom: 1em;
+	border-bottom: solid 1px #cccccc;
+	padding-bottom: 0.3em;
+}
+
+#content h2
+{
+	font-size: 1.5em;
+}
+
+#content h3
+{
+	color: #003399;
+	font-size: 1.1em;
+}
+
+#content ul
+{
+	margin-bottom: 1.5em;
+	padding-left: 1em;
+	list-style: square;
+}
+
+#content blockquote
+{
+	margin-bottom: 1.5em;
+	padding: 0.75em 0.75em 0.75em 1.5em;
+	border-left: solid 0.75em #005082;
+	background: #FDFDFD url(../images/a7.gif) top left repeat-x;
+}
+
+#content blockquote p
+{
+	margin-bottom: 0em;
+}
+
+#content table
+{
+	margin-bottom: 1.5em;
+	border-collapse: collapse;
+	text-align: left;
+}
+
+#content table th
+{
+	font-weight: bold;
+	padding: 0.5em;
+}
+
+#content table td
+{
+	padding: 0.5em;
+	border-right: solid 1px #fff;
+}
+
+#content table tr.rowH
+{
+	color: #fff;
+	background: #006192 url(../images/a8.gif) top left repeat-x;
+	border-right: solid 1px #fff;
+}
+
+#content table tr.rowA
+{
+	background: #F8F8F8 url(../images/a6.gif) top left repeat-x;
+	border-top: solid 1px #fff;
+	color: inherit;
+}
+
+#content table tr.rowB
+{
+	background: #FDFDFD url(../images/a7.gif) top left repeat-x;
+	border-top: solid 1px #fff;
+	color: inherit;
+}
+
+/* Primary Content */
+
+#primaryContentContainer
+{
+	background-color: #fff;
+	float: right;
+	margin: 0em 0em 0em -19em;
+	width: 100%;
+}
+
+#primaryContent
+{
+	margin: 1.5em 0em 0em 15.25em;
+	padding: 1.5em 3em 1.5em 1.5em;
+}
+
+#primaryContent h3
+{
+	margin: 17px 0 3px 0;
+	padding: 0 0 2px 0;
+}
+
+#primaryContent .node .info
+{
+	color: #777777;
+	font-size: 90%;
+}
+
+#primaryContent  .node .content
+{
+	font-family:  Verdana, sans-serif;
+	padding: 5px 10px 5px 10px;
+}
+
+#primaryContent  .node .links
+{
+	font-family:  Verdana, sans-serif;
+	text-align: right;
+	border-top: 1px dotted rgb(221, 221, 221);
+	margin: 12px 8px 12px 8px;
+	padding: 5px 0 5px 0;
+}
+
+
+
+/* Secondary Content */
+
+#secondaryContent
+{
+	
+	float: left;
+	width: 12em;
+	padding: 3em 1.5em 1.5em 1.5em;
+	background: #fff url(../images/a1.gif) top right repeat-y;
+}
+
+#secondaryContent .xbg
+{
+	position: absolute;
+	right: 0em;
+	bottom: -64px;
+	background: #fff url(../images/a3.gif) top right no-repeat;
+	height: 64px;
+	width: 128px;
+}
+
+/* Tertiary Content */
+
+#tertiaryContent
+{
+	position: relative;
+	float: right;
+	width: 15em;
+	padding: 3em 2em 1.5em 2em;
+	background: #fff url(../images/a2.gif) top left repeat-y;
+}
+
+#tertiaryContent .xbg
+{
+	position: absolute;
+	left: 0em;
+	bottom: -64px;
+	background: #fff url(../images/a4.gif) top left no-repeat;
+	height: 64px;
+	width: 128px;
+}
+
+/* Footer */
+
+#footer
+{
+	position: relative;
+	z-index: 1;
+	border-top: dashed 1px #dfdfdf;
+	padding: 1em 0em 2em 0em;
+	margin: 1em 2em 0em 2em;
+	text-align: center;
+}
+
+.clear
+{
+	clear: both;
+}
+
+.alt {
+	background-color: #f8f8f8;
+	border: 1px solid #ddd;
+	}
+	
+.alttwo {
+    background-color: #EBF5FF;
+	border: 1px solid #C0D8F3;
+	}
+
+
+/* Comment Start */
+
+#commentform p {
+	font-family: Verdana, Arial, Sans-Serif;
+	margin: 3px 0;
+	}
+	
+#commentform p#xhtml {
+    background: #EBF5FF;
+	border: 1px solid #C0D8F3;
+	margin: 5px 0;
+	padding: 5px 4px;
+	}
+
+#commentform input {
+	width: 170px;
+	height: 14px;
+	padding: 3px 4px;
+	margin: 3px 5px 1px 0;
+	background: #F5FFE5;
+	border: 1px solid #BDE183;
+	color: #83AE3F;
+	}
+
+#commentform textarea {
+	width: 98%;
+	padding: 3px 4px;
+	margin: 3px 5px 1px 0;
+	background: #F5FFE5;
+	border: 1px solid #BDE183;
+	color: #83AE3F;
+	}
+
+#commentform #submit {
+	margin: 0;
+	padding: 0;
+	float: left;
+	border: none;
+	width: 175px;
+	height: 23px;
+	}
+
+.commentlist {
+	padding: 0;
+	margin: 0;
+	}
+
+.commentlist li {
+	margin: 8px 0 0;
+	padding: 8px 10px 3px;
+	list-style: none;
+	}
+
+.commentlist p {
+	margin: 10px 5px 5px 0;
+	font-weight: normal;
+	line-height: 1.5em;
+	text-transform: none;
+	}
+	
+.commentlist li, #commentform input, #commentform textarea {
+	font: 12px Verdana, Arial, Sans-Serif;
+	}
+
+.commentlist li {
+	font-weight: bold;
+	}
+
+.commentlist li span.gravatar {
+    background: url(../images/defaultgravatar.gif);
+    float: right;
+	border: 2px solid #ccc;
+	width: 26px;
+	height: 26px;
+	}
+
+.commentlist cite, .commentlist cite a {
+	font-weight: bold;
+	font-style: normal;
+	font-size: 12px;
+	color: #6492C2;
+	}
+
+.commentmetadata a {
+    color: #6D95C0;
+	margin: 0;
+	font-weight: normal;
+	border-bottom: 1px dotted #ccc;
+	padding: 5px 0;
+	display: block;
+	}
+	
+.nocomments {
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	}
+
+/* Comment End */

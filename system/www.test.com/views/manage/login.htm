@@ -1,0 +1,79 @@
+<!doctype html public "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>后台管理—登录</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+<!--
+BODY {
+	PADDING-RIGHT: 32px; MARGIN-TOP: 40px; PADDING-LEFT: 32px; FONT-SIZE: 13px; BACKGROUND: #eee; PADDING-BOTTOM: 32px; WIDTH: 300px; COLOR: #000; PADDING-TOP: 32px; FONT-FAMILY: arial
+}
+DIV#Main {
+	BORDER-RIGHT: #bbb 1px solid; PADDING-RIGHT: 32px; BORDER-TOP: #bbb 1px solid; PADDING-LEFT: 32px; BACKGROUND: #fff; PADDING-BOTTOM: 32px; MARGIN-LEFT: 300px; BORDER-LEFT: #bbb 1px solid; WIDTH: 350px; PADDING-TOP: 20px; BORDER-BOTTOM: #bbb 1px solid
+}
+DIV#Heading {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 120%; PADDING-BOTTOM: 15px; MARGIN: 0px; COLOR: #904; PADDING-TOP: 0px; FONT-FAMILY: arial
+}
+H2 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 105%; PADDING-BOTTOM: 0px; MARGIN: 0px 0px 8px; TEXT-TRANSFORM: uppercase; COLOR: #999; PADDING-TOP: 0px; BORDER-BOTTOM: #ddd 1px solid; FONT-FAMILY: "trebuchet ms", ""lucida grande"", verdana, arial, sans-serif
+}
+P.Small {
+	MARGIN-TOP: 12px; FONT-SIZE: 85%
+}
+P {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 6px; MARGIN: 0px; PADDING-TOP: 6px
+}
+A:link {
+	COLOR: #002c99; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #002c99; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #cc0066; BACKGROUND-COLOR: #f5f5f5; TEXT-DECORATION: underline
+}
+.MyLabel {	DISPLAY: block; FONT-WEIGHT: bold; FONT-SIZE: 12px; MARGIN: 6px 0px 2px; TEXT-TRANSFORM: uppercase; COLOR: #999
+}
+A.Button:link {
+	BORDER-RIGHT: #999 1px solid; PADDING-RIGHT: 12px; BORDER-TOP: #999 1px solid; DISPLAY: block; PADDING-LEFT: 12px; FONT-WEIGHT: bold; BACKGROUND: #904; FLOAT: left; PADDING-BOTTOM: 3px; BORDER-LEFT: #999 1px solid; COLOR: #fff; PADDING-TOP: 3px; BORDER-BOTTOM: #999 1px solid; FONT-SIZE: 12px
+}
+A.Button:visited {
+	BORDER-RIGHT: #999 1px solid; PADDING-RIGHT: 12px; BORDER-TOP: #999 1px solid; DISPLAY: block; PADDING-LEFT: 12px; FONT-WEIGHT: bold; BACKGROUND: #904; FLOAT: left; PADDING-BOTTOM: 3px; BORDER-LEFT: #999 1px solid; COLOR: #fff; PADDING-TOP: 3px; BORDER-BOTTOM: #999 1px solid; FONT-SIZE: 12px
+}
+INPUT.Textbox {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; WIDTH: 200px; PADDING-TOP: 2px; FONT-FAMILY: verdana, arial, sans-serif
+}
+-->
+</style>
+</head>
+
+<body>
+
+
+<form name="form1" id="form1" method="post" action="index.asp?/manage/login">
+<table id="tbAddFavorite">
+  <tbody>
+    <tr>
+      <td><div id="Main">
+        <div id="Heading">请登录</div>
+        <label class="MyLabel">用户名</label>
+        <input type="text" name="txtUsername" id="txtUsername" />
+        <br />
+        <br />
+        <label class="MyLabel">密码</label>
+        <input type="password" name="txtPassword" id="txtPassword" />
+        <br />
+        <br />
+        <span id="lblImage" style="FONT-WEIGHT: bold; COLOR: red"></span>&nbsp;<img src="index.asp?/manage/getcode" />&nbsp;
+        <label class="MyLabel">请输入验证码:</label>
+        <input name="txtValidateCode" type="text" id="txtValidateCode" size="15" value="" />
+        <a class="Button" id="lblLogin" style="MARGIN-TOP: 8px" href="javascript:document.getElementById('form1').submit();">登录</a>
+        <p style="MARGIN: 4px 0px 0px 20px">&nbsp;</p>
+        
+      </div></td>
+    </tr>
+  </tbody>
+</table>
+</form>
+</body>
+</html>

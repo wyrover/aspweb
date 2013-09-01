@@ -1,0 +1,62 @@
+/*
+	Design by Free CSS Templates
+	http://www.freecsstemplates.org
+	Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+/* Basic */
+
+*
+{
+	margin: 0em;
+	padding: 0em;
+}
+
+body, form, img, ul, p, dl, dt, dd, h1, h2, h3, h4, h5, h6 {
+	padding: 0; margin: 0; border: 0; list-style: none;
+}
+
+
+
+body
+{
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 10pt;
+	color: #666;
+	background-color: #fff;
+	margin: 0 10px 0 10px;
+}
+
+a
+{
+	color: rgb(0, 51, 153);
+	text-decoration: none;
+}
+
+a:hover
+{
+	color: rgb(51, 51, 51);
+	text-decoration: underline;
+}
+
+img
+{
+	border: 0px;
+}
+
+
+
+
+form.cmxform { width: 97%;	}	
+form.cmxform label { width: 80px; }
+form.cmxform label.preField { width: expression('4em'); min-width: 4em }
+form.cmxform fieldset fieldset { background: none; }	
+form.cmxform fieldset li {	
+	padding: 3px 10px 3px;
+	/*background: url(images/form/cmxform-divider.gif) left bottom repeat-x;*/
+}
+
+#tags { list-style: none; display: inline;}
+#tags li { float: left; }
+
+select { width: 250px; }

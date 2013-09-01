@@ -1,0 +1,18 @@
+
+Function WriteFile(filepath, content)
+	WriteFile = False
+	Call CreateDirectory(Server.MapPath(".") & "\html\")		
+	Call BuildFile(filepath, content, 1)
+	WriteFile = True
+End Function
+
+
+
+Function createfile()
+	Dim Url,Html
+	Url = "http://www.yinsha.com"
+	Html = ReadRemoteFile(Url)
+	filepath =  Server.MapPath(".") & "\html\" & "\test.htm"
+	Call WriteFile(filepath, Html)
+	Response.Write "生成了文件"
+End Function

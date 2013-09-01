@@ -1,0 +1,204 @@
+<%
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Author: Chris Davis
+' Email: web.jockey@verizon.net
+' Use: Feel free to use or modify this source code as you
+'      like for your own applications.
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Purpose of Functions
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' This collection of functions are meant to easily store
+' and retreive files from a common web server cache
+' directory.  The main reason for this is to help speed up
+' web pages where remote slow data sources such as
+' Newsfeeds, Stock Quotes, weather, or other data are 
+' rendered, then displayed.  This can help to minimize
+' the number of actual requests made of the external data
+' sources while speeding up performance for those who visit
+' pages with cached information on them.
+'
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Prerequisites
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Create folder within your wwwroot folder called 
+' "CacheFiles".  Make sure that the IUSR web account has
+' change priviledges to this folder so cache files can be
+' created.
+'
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Example
+'   Be sure to include this file using the
+'   <!-- #INCLUDE VIRTUAL="/Include/cache.asp" -->
+'   directive...  Example code below assumes this...
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'   Dim CachedStockSymbols
+'
+'   ' To simplify our example, let's assume we have some 
+'   ' generic function called GetStocks() which reads stock 
+'   ' symbols from some external source and handles rendering
+'   ' of data into HTML output.
+'   ' It may take a while to read the stock symbols so you
+'   ' are interested in improving performance.  Also, in case
+'   ' your server loses connection with the external source,
+'   ' want to pull from recent cache so that something is
+'   ' displayed.  You decide that you only need to pull the
+'   ' information once every 15 minutes.
+'
+'   ' First, see if we have a cached version of our HTML.
+'   ' The ID name for this page is "Stocks", cache needs
+'   ' to be newer than 15 minutes, and we do not want to
+'   ' override the time and get what's cached...
+'   CachedStockSymbols = GetFromCache ("Stocks", 15, False)
+'
+'   If CachedStockSymbols = "" Then
+'     ' If there's nothing in cache that's valid, then 
+'     ' get stocks...
+'     CachedStockSymbols = GetStocks ("^DJI ^IXIC ^GSPC")
+'     If CachedStockSymbols = "" Then
+'       ' If the GetStocks function didn't return anything
+'       ' then get what was last cached, regardless of age...
+'       CachedStockSymbols = GetFromCache ("Stocks", 15, True)
+'     Else
+'       ' Now that we have new stock feed, save it to cache
+'       ' for next user...
+'       SaveToCache ("Stocks", CachedStockSymbols)
+'     End If
+'   End If
+'   
+'   ' Output CachedStockSymbols
+'   Response.Write CachedStockSymbols
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Notes
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' These cache files are unique to each page.  The file name
+' of each cache file is based on the PATH_INFO server 
+' variable which is unique for each page.  Add to that the
+' ID string so you can pull from multiple cache sources on
+' a page and this becomes a very flexible utility.
+'
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' CachePath - Creates a standard path location and file name
+' to store the cache file.  The current ASP page is used with
+' all path related characters stripped from the path and ID
+' to automatically generate a unique ID.  As long as unique
+' cache IDs exist on one page, then there will be no conflict.
+'
+' strID can be the same on multiple pages.  It is appended
+' to the end of each cache file.  For example, if my page
+' were /Content/Default.asp and from within that ASP file
+' I created a cache with the strID of "Stocks", the resulting
+' file put into the CacheFiles folder would be named:
+' -Content-Default-asp-Stocks.cache
+' If another page located in /Content/MyFolder/Stocks.asp
+' used "Stocks" as the strID, the resulting name would be:
+' -Content-MyFolder-Stocks-asp-Stocks.cache
+
+
+Function CachePath (strID)
+	' The following lines make sure that no illegal characters
+	' exist in the cache filename.
+	CachePath = Request.ServerVariables("PATH_INFO") & "-" & strID
+	CachePath = Replace(CachePath, ":", "-")
+	CachePath = Replace(CachePath, "\", "-")
+	CachePath = Replace(CachePath, "/", "-")
+	CachePath = Replace(CachePath, ".", "-")
+
+	' If you decide to move the location of your CacheFiles folder,
+	' just make the change here:
+	CachePath = Server.Mappath("\CacheFiles") & "\" & CachePath & ".cache"
+End Function
+
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' SaveToCache - Saves a given string input to a cache file.
+'
+' strID - Cache ID to save as
+'
+' strInput - Content to be cached to disk
+
+Sub SaveToCache (strID, strInput)
+	Dim LocalFileLoc, f, oFSO
+	' Calculate Cache File Location
+	LocalFileLoc = CachePath (strID)
+	
+	Set oFSO = CreateObject("Scripting.FileSystemObject")
+
+	' Delete old file
+	If (oFSO.FileExists(LocalFileLoc)) Then
+		oFSO.DeleteFile(LocalFileLoc)
+	End If
+
+	' Create new one
+	Set f = oFSO.OpenTextFile(LocalFileLoc, 2, True)
+	f.Write strInput
+	f.Close
+	Set f = Nothing
+	Set oFSO = Nothing
+End Sub
+
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' GetFromCache - Reads a file from the local disk and returns
+' the contents of the file if the cache is current.  If cache
+' is not current, then an empty string is returned.
+'
+' strID - ID of Cache file.  This is used when caching more
+' one item on a page.  Give it a ID string that's unique on
+' the page.
+'
+' intMinutes - Maximum age in minutes the cache file can be
+' used from original time of creation.
+'
+' bUseExisting - (True/False) - When this is set to true, 
+' the cache file will be read regardless of its age, if
+' available.  If False, then the cache file is read in
+' only if it is newer than intMinutes (see above).  If the
+' cache file is older or doesn't exist, then a null string
+' is returned.
+
+Function GetFromCache (strID, intMinutes, bUseExisiting)
+	Dim oFSO, oFile, PermissionChecker, FileInput
+	Dim LocalFileLoc, LastModified
+
+	' Set default value
+	GetFromCache = ""
+
+	' Get the Cache File Location
+	LocalFileLoc = CachePath (strID)
+
+	' Check to see if file exists
+	Set oFSO = Server.CreateObject("Scripting.FileSystemObject")
+	If (oFSO.FileExists(LocalFileLoc)) Then
+		'Check to see if current user can access the file
+		Set PermissionChecker = Server.CreateObject("MSWC.PermissionChecker")
+		If PermissionChecker.HasAccess(LocalFileLoc) Then
+			'Get file date for time comparison
+			Set oFile = oFSO.GetFile(LocalFileLoc)
+			LastModified = oFile.DateLastModified
+			'If file is new enough or bUseExisiting is True, then read file.
+			If (DateDiff ("n", LastModified, Now()) < intMinutes) or (bUseExisiting = True) Then
+				Set FileInput = oFSO.OpenTextFile(LocalFileLoc, 1)
+				do while not FileInput.AtEndOfStream
+					GetFromCache = GetFromCache & FileInput.ReadLine & vbCRLF
+				loop
+				FileInput.Close
+				Set FileInput = Nothing
+			End If
+			Set oFile = Nothing
+		End If
+		Set PermissionChecker = Nothing
+	End If
+	Set oFSO = Nothing
+End Function
+%>

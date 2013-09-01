@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="中文宋体" lang="中文宋体">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Language" content="中文宋体" />
+	<link rel="stylesheet" rev="stylesheet" href="<cms:function>GetBaseURL()</cms:function>skins/clear/jianjie.css" type="text/css" media="screen" />
+	<link rel="stylesheet" rev="stylesheet" href="<cms:function>GetBaseURL()</cms:function>skins/clear/print.css" type="text/css" media="print" />
+	<link rel="alternate" type="application/rss+xml" href="<cms:function>GetBaseURL()</cms:function>/rss.xml" title="<cms:function>GetSiteName()</cms:function>" />
+	<script language="JavaScript" src="<cms:function>GetBaseURL()</cms:function>skins/clear/common.js" type="text/javascript"></script>
+	<title><cms:list><sql>SELECT Title FROM blog_blogs WHERE ID = {$blogId}</sql><template>$Title$</template><cache>1</cache></cms:list>-<cms:function>GetSiteName()</cms:function></title>
+	<script language="JavaScript" src="<cms:function>GetBaseURL()</cms:function>skins/clear/screen.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	function postcomment()
+	{
+		var strName=document.getElementById("txtAuthor").value;
+		var strEmail=document.getElementById("txtEmail").value;
+		var strHomePage=document.getElementById("txtUrl").value;
+		var strComment;
+
+		if (document.getElementById("comment").value){
+			strComment = document.getElementById("comment").value;
+		}
+		else{
+			strComment = document.getElementById("comment").innerText;
+		}
+
+
+		if(strName==""){
+			alert('名称或邮箱不能为空');
+			return false;
+		}
+		else{
+			re = new RegExp("^[.A-Za-z0-9\u4e00-\u9fa5]+$");
+			if (!re.test(strName)){
+				alert('名称或邮箱格式不对');
+				return false;
+			}
+		}
+
+
+		if(strEmail==""){
+			//alert(str01);
+			//return false;
+		}
+		else{
+			re = new RegExp("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
+			if (!re.test(strEmail)){
+				alert('名称或邮箱格式不对');
+				return false;
+			}
+		}
+
+
+		if(typeof(strComment)=="undefined"){
+			alert('留言不能为空或过长');
+			return false;
+		}
+
+		if(typeof(strComment)=="string"){
+			if(strComment==""){
+				alert('留言不能为空或过长');
+				return false;
+			}
+			if(strComment.length>1000)
+			{
+				alert('留言不能为空或过长');
+				return false;
+			}
+		}
+
+
+		var bolRemember=document.getElementById("chkRemember").checked;
+
+		
+		if(bolRemember==true){
+			SaveRememberInfo();
+		}
+		else{
+			SetCookie("chkRemember",bolRemember,365);
+		}
+		
+
+	
+		
+		
+		//ajax comment begin
+		$.post(document.getElementById("commentform").action,
+			{						
+			"txtValidateCode":(document.getElementById("txtValidateCode")?$("#txtValidateCode").val():""),
+			"comment": strComment,
+			"txtAuthor": strName,
+			"txtEmail": strEmail,
+			"txtUrl": strHomePage
+			},
+			function(data){
+				
+				var s =data;			
+				if((s.search("commentlist")>0)&&(s.search("commenttitle")>0))
+				{			
+					var i=Math.round(Math.random()*1000);
+					var s ="<div id=\"divAjaxComment"+i+"\">"+data+"</div>";
+					$(s).insertBefore("#divAjaxComment");
+					$("#divAjaxComment"+i).fadeIn("slow");
+					//$("#divAjaxComment"+i).fadeTo("normal", 0);
+					//$("#divAjaxComment"+i).fadeTo("normal", 1);
+					//$("#divAjaxComment"+i).show("slow");
+					
+					$("#comment").val("");
+				}
+				else
+				{
+					alert(data);	
+				}
+
+			}
+		);
+
+
+		
+		
+		
+		return false;
+
+	}
+	</script>
+
+
+</head>
+<body class="multi_default">
+<div id="wrapper">
+
+<div id="content" class="box">
+
+		<div class="post">
+
+
+
+			<cms:list>
+				<sql>SELECT A.*, B.BlogCategoryName, C.Author AS authorname, (SELECT COUNT(ID) FROM blog_comments WHERE BlogID = A.ID) AS CommentCount FROM ((blog_blogs A  INNER JOIN blog_categories B ON B.ID = A.BlogCategoryID) INNER JOIN blog_author C ON C.ID = A.Author) WHERE A.ID = {$blogId}</sql>
+				<template>
+					
+			<h2 class="posttitle" id="post">$Title$</h2>			
+			<p class="postmeta">$PostTime$</p>
+			<div class="postentry">$iHTMLEncode(Content)$</div>
+			<p class="postfeedback">Tags:&nbsp;&nbsp;&nbsp;&nbsp;$FormatTag(Tags)$</p>
+			<p class="postliulan"> 
+				分类:&nbsp;$BlogCategoryName$&nbsp;&nbsp;&nbsp;&nbsp;评论:&nbsp;$CommentCount$&nbsp;&nbsp;&nbsp;&nbsp;浏览:&nbsp;<script language="javascript" src="<cms:function>GetBaseURL()</cms:function>index.asp?/ajax/gethits/$id$" type="text/javascript"></script>
+			</p>
+			
+					 
+				</template>
+				<cache>1</cache>
+			</cms:list>
+
+
+
+
+
+
+
+						
+		</div>
+<!--		
+<ul class="msg trackback">
+	<li class="msgarticle">引用地址:&nbsp;<cms:function>GetBaseURL()</cms:function>?/traceback/index/184</li>
+</ul>-->
+
+<ul class="msg trackback">
+	<li class="mutuality"><cms:list><sql>SELECT * FROM blog_blogs WHERE ID = {$blogId}</sql><template>$getContactBlogs(Tags, ID)$</template><cache>1</cache></cms:list></li>
+</ul>
+
+<cms:list>
+	<sql>SELECT * FROM blog_comments WHERE BlogID = {$blogId}</sql>
+	<template>
+			<ol class="commentlist">
+				<li class="altcomment">
+				<h3 class="commenttitle"><a name="cmt{RECORD_NUM}">{RECORD_NUM}</a>.<a href="mailto:youremail@email.com">$Author$</a></h3>
+					$Content$
+			<p class="commentmeta">$PostTime$</p>
+			</li>
+			</ol>
+	</template>
+	<cache>5</cache>
+</cms:list>	
+
+
+
+<div style="display:none;" id="divAjaxComment"></div>
+
+<div class="post" id="divCommentPost">
+
+<a name="addcomment"></a>
+<h2 class="title">发表评论</h2>
+
+<form action="<cms:function>GetBaseURL()</cms:function>index.asp?/comment/post/{$blogId}" method="post" id="commentform">
+
+
+<p><input type="text" id="txtAuthor" name="author" id="author" value="" size="22" tabindex="1" />
+<label for="txtAuthor"><small>Name </small></label></p>
+
+<p><input type="text" name="txtEmail" id="txtEmail" value="" size="22" tabindex="2" />
+<label for="txtEmail"><small>Mail (will not be published) </small></label></p>
+
+<p><input type="text" name="txtUrl" id="txtUrl" value="" size="22" tabindex="3" />
+<label for="txtUrl"><small>Website</small></label></p>
+
+
+<p><input type="text" name="txtValidateCode" id="txtValidateCode" size="15" value="" />
+1+1+1=?</p>
+
+<p><input type="checkbox" name="chkRemember" value="1" id="chkRemember" /> <label for="chkRemember">记住我,下次回复时不用重新输入个人信息</label></p>
+<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
+
+<p><input name="submit" type="image" src="http://www.5xing.cn/wp-content/themes/hoofeiv4/images/submit.png" id="submit" tabindex="5" value="Submit Comment" onclick="javascript:return postcomment()"/>
+<input type="hidden" name="comment_post_ID" value="{$blogId}" /></p>
+<script language="JavaScript" type="text/javascript">LoadRememberInfo();</script>
+</form>
+
+
+
+	
+</div>
+				
+
+</div>						
+				
+<div class="box sidebar" id="sidebar-1">
+<ul>
+	<li>
+		<h2>导航</h2>
+		<ul><li><span onclick="location.href='<cms:function>GetBaseURL()</cms:function>'" title="网站首页" style="cursor:pointer;">首页</span> · <span onclick="location.href='<cms:function>GetBaseURL()</cms:function>?/home/tags'" title="关键字索引" style="cursor:pointer;">索引</span> · <span onclick="window.open('http://www.openthought.cn/')" title="投资论坛" style="cursor:pointer;">论坛</span></li></ul>
+	</li>
+
+	<li>
+		<h2>搜索</h2>
+		<ul>
+			<p>
+				<script type="text/javascript"> 
+			　　function Gsitesearch(curobj){ 			　 
+			　　curobj.q.value="site:"+ "<cms:function>GetDomain()</cms:function>" +" "+curobj.qfront.value; 
+			　　} 
+			　　</script> 
+				<form method="get" action="http://www.google.com/search" onSubmit="Gsitesearch(this)">
+					<input name="q" type="hidden" /> 
+　　				<input name="qfront" type="text" class="text" />
+					<input type="submit" value="搜索" name="btnPost" id="btnPost" class="button"/>					
+				</form>
+			</p>
+		</ul>
+	</li>
+
+	<li>
+		<h2>文章</h2>
+		<ul>
+		
+		<cms:list>
+			<sql>SELECT TOP 10 A.*, B.BlogCategoryName, B.EName as categoryename, C.Author as authorname, (SELECT COUNT(ID) FROM blog_comments WHERE BlogID = A.ID) AS CommentCount FROM ((blog_blogs A  INNER JOIN blog_categories B ON B.ID = A.BlogCategoryID) INNER JOIN blog_author C ON C.ID = A.Author) ORDER BY A.ID DESC</sql>
+			<template>		
+				<li><a href="$getViewURL(PostTime, Alias, ID)$">$Title$</a></li>
+			</template>
+			<cache>1</cache>
+		</cms:list> 	
+		
+		</ul>
+	</li>
+
+	<li>
+		<h2>评论</h2>
+		<ul>
+		
+			<cms:list>
+				<sql>SELECT TOP 15 A.*, B.PostTime as BlogPostTime, B.Alias FROM blog_comments A INNER JOIN blog_blogs B ON B.ID = A.BlogID ORDER BY A.PostTime DESC</sql>
+				<template>
+				
+				<li><a href="$getCommentURL(BlogPostTime, Alias, BlogID, ID)$">$FormatComment(Content)$</a></li>
+	  
+				
+				</template>
+				<cache>20</cache>
+			</cms:list> 
+		
+		
+		</ul>
+	</li>
+
+
+</ul>
+</div>
+
+</div>
+
+</body>
+</html>

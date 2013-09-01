@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>基本设置</title>
+<link href="system/styles/admin.css" rel="stylesheet" type="text/css" />
+<link type="text/css" href="system/styles/wforms.css" rel="stylesheet" />
+<link type="text/css" href="system/styles/tabber.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="system/scripts/jquery.js"></script> 
+<script type="text/javascript" src="system/scripts/wforms.js"></script> 
+<script type="text/javascript" src="system/scripts/cmxform.js"></script>
+<script type="text/javascript" src="system/scripts/tabber.js"></script>
+
+<script type="text/javascript">
+function setskin(skin)
+{
+	$.get(
+		"index.asp?/manage/setskin/" + skin,
+		function(result) {
+			if (result == "1")
+			{
+				alert("您已将模板设置为" + skin);
+			}
+		}
+	);
+}
+</script>
+
+</head>
+<body>
+
+
+<div class="tabber">
+
+     <div class="tabbertab">
+	  <h2>基本设置</h2>
+	  <p>
+	  
+	<form name="frm" action="index.asp?/manage/desktop" method="post" class="cmxform">
+		
+	<fieldset>
+	<legend>基本设置</legend>
+	<ol>
+		<li><label>站点URL：</label><input type="text" name="txtBaseURL" class="required" id="txtBaseURL" maxlength="255" style="width: 250px;" value="{$base_url}" /></li>
+		<li><label>网站名称：</label><input type="text" id="txtSitename" name="txtSitename" class="required" maxlength="255" style="width: 250px;" value="{$site_name}"/></li>
+		<li><label>网站描述：</label><input type="text" id="txtSiteDescription" name="txtSiteDescription" class="required" maxlength="255" style="width: 250px;" value="{$site_description}"/></li>
+		<li><label>站长名字：</label><input type="text" id="txtWebmaster" name="txtWebmaster" class="required" maxlength="255" style="width: 250px;" value="{$webmaster}"/></li>
+		<li><label>备案编号：</label><input type="text" id="txtICP" name="txtICP" class="required" maxlength="255" style="width: 250px;" value="{$ICP}"/></li>
+		<li><label>联系Email：</label><input type="text" id="txtEmail" name="txtEmail" class="required" maxlength="255" style="width: 250px;" value="{$contact_email}"/></li>
+		<li><label>存档文件夹：</label><input type="text" id="txtArchives" name="txtArchives" class="required" maxlength="255" style="width: 250px;" value="{$archives}"/></li>
+		<li>
+		<table>
+			<tr>
+				<th>附件目录设定</th>
+				<td>附件文件目录：<br /><input type="text" id="txtAttachmentdir" /><br />
+					  图片文件目录：<br /><input type="text" id="txtAttachmentImgDir" name="txtAttachmentImgDir" value="{$attachment_img_dir}" /><br />
+				</td>
+			</tr>
+		</table>
+		</li>
+		<li><b>数据显示设置</b></li>
+		<li><label>文章列表：</label><input type="text" name="txtArticleListCount" class="required" id="txtArticleListCount" maxlength="255" style="width: 250px;" value="{$article_list_count}" /></li>
+		<li><label>图片列表：</label><input type="text" id="txtPicListCount" name="txtPicListCount" class="required" maxlength="255" style="width: 250px;" value="{$pic_list_count}"/></li>
+		<li><label>下载列表：</label><input type="text" id="txtDownloadListCount" name="txtDownloadListCount" class="required" maxlength="255" style="width: 250px;" value="{$download_list_count}"/></li>
+	
+	</ol>
+
+	
+
+	<p style="text-align:center;">
+	<input type="submit" class="userbutton" id="btnSave" name="btnSave" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" />
+	</p>
+
+	</fieldset>		   
+		
+
+	</form>
+
+
+</p>
+     </div>
+
+
+
+
+	<div class="tabbertab">
+	  <h2>模板</h2>
+	  <p>
+		
+		<fieldset>
+		<legend>模板列表</legend>
+		<ol>
+			{$skins}			
+		</ol>
+	</fieldset>	
+	  
+	  </p>
+     </div>
+
+
+
+
+
+     <div class="tabbertab">
+	  <h2>服务器信息</h2>
+	  <p>
+		
+		<fieldset>
+		<legend>服务器信息</legend>
+		<ol>
+			<li><label>服务器域名：</label>{$server_name}</li>
+			<li><label>服务器     IP：</label>{$sever_ip}</li>
+			<li><label>服务器引擎：</label>{$server_engine}</li>
+			<li><label>服务器版本：</label>{$server_software}</li>
+			<li><label>服务器端口：</label>{$server_port}</li>
+			<li><label>服务器公话：</label>{$application_count}个（Application）</li>
+			<li><label>服务器私话：</label>{$session_count}个（Session）</li>
+			<li><label>实物理路径：</label>{$path}</li>
+			<li><label>虚拟机路径：</label>{$virtual_path}</li>
+			<li><label>服务器超时：</label>{$server_timeout}秒</li>			
+			<li><label>服务器时间：</label>{$server_time}</li>
+		</ol>
+	</fieldset>	
+	  
+	  </p>
+     </div>
+
+
+     <div class="tabbertab">
+	  <h2>服务器组件支持情况</h2>
+	  <p>
+	  
+		<fieldset>
+		<legend>服务器组件支持情况</legend>
+		<ol>
+			<li><label>FSO对象：</label>{$obj1}</li>
+			<li><label>ADO 数据对象：</label>{$obj2}</li>
+			<li><label>AspUpload 文件上传组件：</label>{$obj3}</li>
+			<li><label>AspJpeg 图像读写组件：</label>{$obj4}</li>
+			<li><label>ASPemail 发信组件：</label>{$obj5}</li>
+			<li><label>JMAIL发送邮件：</label>{$obj6}</li>
+			<li><label>虚拟 SMTP 发信：</label>{$obj7}</li>
+			<li><label>SA 的图像读写组件：</label>{$obj8}</li>
+			<li><label>Dimac 的图像读写组件：</label>{$obj9}</li>
+			<li><label>w3.Upload 文件上传组件：</label>{$obj10}</li>					
+		</ol>
+	</fieldset>	
+	  </p>
+     </div>
+
+</div>
+
+
+</body>
+</html>
+
+		
+		

@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="中文宋体" lang="中文宋体">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Language" content="中文宋体" />
+	<link rel="stylesheet" rev="stylesheet" href="<cms:function>GetBaseURL()</cms:function>skins/clear/jianjie.css" type="text/css" media="screen" />
+	<link rel="stylesheet" rev="stylesheet" href="css/print.css" type="text/css" media="print" />
+	<link rel="alternate" type="application/rss+xml" href="rss.xml" title="wyrover.cn" />
+	<script language="JavaScript" src="<cms:function>GetBaseURL()</cms:function>skins/clear/common.js" type="text/javascript"></script>
+	<title><cms:function>GetSiteName()</cms:function></title>
+	<script language="JavaScript" src="<cms:function>GetBaseURL()</cms:function>skins/clear/screen.js" type="text/javascript"></script>
+</head>
+<body class="multi_default">
+
+<div id="wrapper">
+
+<div id="content" class="box">
+
+<div class="post">
+
+
+<h2 class="posttitle">{$tag_name}</h2>
+	
+	<div class="postentry">
+	<ul>
+				<cms:list>
+					<sql>SELECT * FROM blog_blogs WHERE Tags LIKE {$tag_id}</sql> 
+					<template>
+						<li><a href="$getViewURL(posttime, Alias, id)$">$title$</a></li>
+					</template>
+					<cache>1</cache>
+				</cms:list>
+			</ul>
+
+	</div>
+
+</div>
+
+
+
+</div>
+
+
+
+
+</div>						
+				
+<div class="box sidebar" id="sidebar-1">
+<ul>
+	<li>
+		<h2>导航</h2>
+		<ul><li><span onclick="location.href='<cms:function>GetBaseURL()</cms:function>'" title="网站首页" style="cursor:pointer;">首页</span> · <span onclick="location.href='<cms:function>GetBaseURL()</cms:function>?/home/tags'" title="关键字索引" style="cursor:pointer;">索引</span> · <span onclick="window.open('http://www.openthought.cn/')" title="投资论坛" style="cursor:pointer;">论坛</span></li></ul>
+	</li>
+
+	
+	<li>
+		<h2>目录</h2>
+		<ul>
+		<cms:list>
+		<sql>SELECT * FROM blog_categories WHERE ParentID = 0 ORDER BY ID ASC</sql>
+		<template><li><a href="$getCategoryURL(EName)$">$BlogCategoryName$ ($getBlogCountByCategory(ID)$)</a></li>
+		</template>
+		<cache>20</cache>
+	  </cms:list>
+		
+		</ul>
+	</li>
+
+	<li>
+		<h2>搜索</h2>
+		<ul>
+			<p>
+				<script type="text/javascript"> 
+			　　function Gsitesearch(curobj){ 			　 
+			　　curobj.q.value="site:"+ "<cms:function>GetDomain()</cms:function>" +" "+curobj.qfront.value; 
+			　　} 
+			　　</script> 
+				<form method="get" action="http://www.google.com/search" onSubmit="Gsitesearch(this)">
+					<input name="q" type="hidden" /> 
+　　				<input name="qfront" type="text" class="text" />
+					<input type="submit" value="搜索" name="btnPost" id="btnPost" class="button"/>					
+				</form>
+			</p>
+		</ul>
+	</li>
+
+
+	<li>
+		<h2>归档</h2>
+		<ul>
+		
+		<cms:list>
+				<sql>SELECT DISTINCT(DateNode) FROM blog_blogs ORDER BY DateNode DESC</sql>
+				<template><li>$getArchiveLinkByMonth(DateNode)$</li>
+				</template>
+				<cache>20</cache>
+				</cms:list>  
+		
+		
+		</ul>
+	</li>
+
+	<li>
+		<h2>评论</h2>
+		<ul>
+		 <cms:list>
+				<sql>SELECT TOP 15 A.*, B.PostTime as BlogPostTime, B.Alias FROM blog_comments A INNER JOIN blog_blogs B ON B.ID = A.BlogID ORDER BY A.PostTime DESC</sql>
+				<template>
+				
+				<li><a href="$getCommentURL(BlogPostTime, Alias, BlogID, ID)$">$FormatComment(Content)$</a></li>
+	  
+				
+				</template>
+				<cache>20</cache>
+			</cms:list> 
+		
+		
+		</ul>
+	</li>
+</ul>	
+</div>
+
+<div class="box sidebar" id="sidebar-2">
+<ul>
+	
+
+	
+	<li>
+		<h2>链接</h2>
+		<ul>
+		
+		<cms:list>
+		<sql>SELECT TOP 10 * FROM blog_links ORDER BY Sort</sql>
+		<template><li><a href="$URL$" target="_blank" title="$Name$">$Name$</a></li></template>
+		<cache>1</cache>
+	</cms:list> 
+
+		<li><a href="<cms:function>GetBaseURL()</cms:function>?/links/index">更多...</a></li>
+		</ul>
+		
+	</li>
+
+
+
+
+	<li>
+		<h2>版权</h2>
+		<ul>
+			<li id="BlogPowerBy"><a href='../www.miibeian.gov.cn/index.html' target=_blank>备案中...</a></li>
+			<li id="BlogCopyRight">2007·RBLOG &copy; Reserved</li>
+		</ul>
+	</li>
+
+</ul>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Player</title>
+<link media="all" rel="stylesheet" type="text/css" href="<cms:function>GetBaseURL()</cms:function>Skins/Default/Style.css" />
+
+<!--[if IE]><link media="all" rel="stylesheet" type="text/css" href="Skins/FixIE.css" /><![endif]-->
+
+<link rel="stylesheet" href="<cms:function>GetBaseURL()</cms:function>skins/tabber/example.css" TYPE="text/css" MEDIA="screen">
+<style type="text/css">
+.tabbertab ul { list-style: none;}
+.tabbertab ul li { float: left; margin: 5px; font-size: 14px;}
+.tabbertab ul li img { width: 70px; height: 70px; };
+.list li {float: none; clear: both;}
+.clear {clear:both;}
+</style>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/tabber.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/jquery.js"></script> 
+
+<script type="text/javascript">
+
+/* Optional: Temporarily hide the "tabber" class so it does not "flash"
+   on the page as plain HTML. After tabber runs, the class is changed
+   to "tabberlive" and it will appear.
+*/
+document.write('<style type="text/css">.tabber{display:none;}<\/style>');
+
+var tabberOptions = {
+
+  /* Optional: instead of letting tabber run during the onload event,
+     we'll start it up manually. This can be useful because the onload
+     even runs after all the images have finished loading, and we can
+     run tabber at the bottom of our page to start it up faster. See the
+     bottom of this page for more info. Note: this variable must be set
+     BEFORE you include tabber.js.
+  */
+  'manualStartup':true,
+
+  /* Optional: code to run after each tabber object has initialized */
+
+  'onLoad': function(argsObj) {
+    /* Display an alert only after tab2 */
+    if (argsObj.tabber.id == 'tab2') {
+      //alert('Finished loading tab2!');
+	  var t = argsObj.tabber;
+	  $.get(
+			"index.asp?/player/get_p/A", 
+			function(result) {			
+				//$("#progress").html(result);						
+				t.tabs[0].div.innerHTML = result;
+			}
+		);
+    }
+  },
+
+  /* Optional: code to run when the user clicks a tab. If this
+     function returns boolean false then the tab will not be changed
+     (the click is canceled). If you do not return a value or return
+     something that is not boolean false, */
+
+  'onClick': function(argsObj) {
+
+    var t = argsObj.tabber; /* Tabber object */
+    var id = t.id; /* ID of the main tabber DIV */
+    var i = argsObj.index; /* Which tab was clicked (0 is the first tab) */
+    var e = argsObj.event; /* Event object */
+
+    if (id == 'tab2') {
+
+		$.get(
+			"index.asp?/player/get_p/" + t.tabs[i].headingText, 
+			function(result) {			
+				//$("#progress").html(result);						
+				t.tabs[i].div.innerHTML = result;
+			}
+		);
+
+      //return confirm('Swtich to '+t.tabs[i].headingText+'?\nEvent type: '+e.type);
+    }
+  },
+
+  /* Optional: set an ID for each tab navigation link */
+  'addLinkId': true
+
+};
+
+</script>
+
+<script type="text/javascript">
+function get_z_list(url)
+{
+	$.post(
+		"index.asp?/player/get_z_list", 
+		{ src: url }, 
+		function(result) {			
+			$("#result").html(result);				
+		}
+	);
+}
+
+function get_wma_list(url)
+{
+	$.post(
+		"index.asp?/player/get_wma_list", 
+		{ src: url }, 
+		function(result) {			
+			$("#result").html(result);				
+		}
+	);
+}
+
+function play(url)
+{
+	document.getElementById('Exobud').FileName = url;
+}
+</script>
+
+
+<script type="text/javascript">
+
+document.domain="1ting.com";
+
+
+function clk(act,id){
+	var v = "";
+	var o;
+	var a = getTags(getObject(id),"input");
+	for(var i=0; i<a.length; i++){
+		o = a[i];
+		if(act=="all"){
+			o.checked = true;	
+		}else if(act=="un"){
+			if(o.checked){
+				o.checked = false;
+			}else{
+				o.checked = true;
+			}
+		}else{
+			var n = a[i].value;
+			if(n>0 && a[i].checked){
+				v = v + a[i].value + "_";
+			}
+		}
+	}
+	if(act=="play"){
+		v = v.substring(0,v.length-1);
+		if(v.length==0){
+			alert("请选择歌曲后再进行连播！");
+		}else{
+			window.open("http://play.1ting.com/p_"+v+".html","players");
+		}
+	}
+}
+
+function copyInBoard(s) { 			
+	window.clipboardData.setData("text",s);
+	alert("网址复制成功啦!");			
+} 
+
+
+
+</script>
+<script type="text/javascript">
+
+function getLrcUrl(id){
+	if(id==0){
+		return "/lrc.html";
+	}
+	var lrcID = id;
+	var lrcUrl = "/lrc/";
+	var lrcID2 = "000";
+	if(lrcID.length<2){
+		lrcID2 = lrcID+"00";
+	}
+	else if(lrcID.length<3){
+		lrcID2 = lrcID+"0";
+	}
+	else if(lrcID.length>3){
+	lrcID2 = lrcID.substring(0,3);
+	}else{
+		lrcID2 = lrcID;
+	}
+	lrcUrl += lrcID2;
+	lrcUrl +="/lrc_"+lrcID+".html";
+	return lrcUrl;
+}
+
+function PlayerUtils(){
+
+	var p = 0; 
+
+	var a = total -1;
+
+	var arr_i = "";
+
+	var list = arr_ids;
+		
+
+	this.doPlay = function(){
+		if(document.getElementById('Exobud').PlayState==0)	{
+			this.doPlayNext(1);
+		}
+		setTimeout("pu.doPlay()", 1000); 
+	};
+
+	this.doPlayNext = function(t){
+		p += t; 
+		if(p>a){
+			p = 0;
+		}else if(p<0){
+			p = a;
+		}
+		this.utils(p);
+	};
+
+	this.utils = function(r){
+		var sid = arr_ids[r];
+		if(sid==0){
+			r = p = 0;
+		}
+		var oid = r + "_" + sid;
+		p = r;
+
+		var s = "<span style=\"float:right;width:150px;\">歌手：";
+		s += getObject("singer_"+oid).innerHTML;
+
+		s += "</span>曲目：";
+		s += getObject("song_"+oid).innerHTML;
+
+		var url = "http://wma.1ting.com/wmam" + document.getElementById("url_"+oid).value;
+		document.getElementById('Exobud').FileName = url;
+		
+		
+		document.getElementById("songInfo").innerHTML = s;
+
+		this.bgcolor();
+		//getObject("lrcPage").src = "/lrc_"+sid+".html";
+		//ivr(getObject("url_"+oid).name);
+		//ivrloop(getObject("url_"+oid).name)
+	};
+	
+	this.bgcolor = function(){
+		var r = p;
+		var d;
+		var oid = r+"_"+arr_ids[r];
+		var list = getTags(getObject("songs"),"li");
+		for(i=0;i<list.length;i++){
+			d = list[i];
+			if(d.id!=oid){
+				getObject(d.id).style.backgroundColor="#FFFFFF";
+			}else{
+				getObject(d.id).style.background="powderblue";
+			}
+		}
+	};
+
+	this.changeBg = function(id,act) {
+		var oid = p+"_"+arr_ids[p];
+		if(act=="over"){
+			getObject(id).style.background="paleGreen";
+		}else if(oid!=id){
+			getObject(id).style.background="white";
+		}else{
+			getObject(id).style.background="powderblue";
+		}
+	};
+	
+	this.deleteSong = function(ids,id){
+		var params = "ids="+ids;
+		params += "&id="+id;
+		params += "&act=del";
+		myxmlhttp = CreateXmlHttpReq(this.songsHttpHandler);
+		XmlHttpPOST(myxmlhttp, "/songs.gv", params);
+	};
+
+	this.songsHttpHandler = function(){
+		if (myxmlhttp.readyState !=4 ) {
+			return;
+		}
+		var html = myxmlhttp.responseText;
+		alert(html);
+		if(html.indexOf("success")!=-1){
+			html = html.replace("success","");
+			getObject("songsPlay").innerHTML = html;
+		}else{
+			alert("网络出现异常，操作失败！");
+		}	
+	}
+
+}
+
+function ivrloop(name){
+	var s = "<iframe id=iframe name=iframe marginWidth=0 marginHeight=0 src=\"http://img.1ting.com/ting/p_5.html?s=";
+		s += name;
+		s += "\" frameBorder=0 width=300 scrolling=no height=300></iframe> ";
+		getObject("ivrloop").innerHTML=s;
+}
+
+function ivr(song){
+	if(song.length>6){
+		song = song.substring(0,6);
+	}
+	var s = "";
+	s+="<iframe width=\"350\" height=\"28\" src=\"";
+	s+="http://img.1ting.com/ting/p_2.html?s=";
+	s+=song;
+	s+="\" frameborder=\"no\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"No\"></iframe>";
+	getObject("ivr").innerHTML=s;
+}
+
+function players(){
+	document.write("<object id=\"Exobud\" width=\"350\" height=\"68\" classid=\"CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95\"  codebase=\"http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,4,5,715\" ");
+	document.write(" align=\"baseline\" border=\"0\" standby=\"Loading Microsoft Windows Media Player components...\" ");
+	document.write(" type=\"application/x-oleobject\"> ");
+	document.write("<param name=\"ShowControls\" value=\"1\">");
+	document.write("<param name=\"ShowPositionControls\" value=\"0\">");
+	document.write("<param name=\"ShowAudioControls\" value=\"1\">");
+	document.write("<param name=\"ShowTracker\" value=\"1\">");
+	document.write("<param name=\"ShowDisplay\" value=\"0\">");
+	document.write("<param name=\"ShowStatusBar\" value=\"1\">");
+	document.write("<param name=\"AutoSize\" value=\"0\">");
+	document.write("<param name=\"ShowGotoBar\" value=\"0\">");
+	document.write("<param name=\"ShowCaptioning\" value=\"0\">");
+	document.write("<param name=\"AutoStart\" value=\"1\">");
+	document.write("<param name=\"PlayCount\" value=\"1\">");
+	document.write("<param name=\"AnimationAtStart\" value=\"0\">");
+	document.write("<param name=\"TransparentAtStart\" value=\"0\">");
+	document.write("<param name=\"AllowScan\" value=\"0\">");
+	document.write("<param name=\"EnableContextMenu\" value=\"1\">");
+	document.write("<param name=\"ClickToPlay\" value=\"0\">");
+	document.write("<param name=\"InvokeURLs\" value=\"1\">");
+	document.write("<param name=\"DefaultFrame\" value=\"datawindow\">");
+	document.write("<param name=\"filename\" value=\"\">");
+	document.write("<param name=\"volume\" value=\"0\">");
+	document.write("<embed align=\"baseline\"  border=\"0\" width=\"350\" height=\"68\"");
+	document.write(" type=\"application/x-mplayer2\" pluginspage=\"http://www.microsoft.com/isapi/redir.dll?prd=windows&amp;sbp=mediaplayer&amp;ar=media&amp;sba=plugin&amp;\"");
+	document.write(" name=\"MediaPlayer\" showcontrols=\"1\" showpositioncontrols=\"0\"");
+	document.write(" showaudiocontrols=\"1\" showtracker=\"1\" showdisplay=\"0\" showstatusbar=\"1\"");
+	document.write(" autosize=\"0\"");
+	document.write(" showgotobar=\"0\" showcaptioning=\"0\" autostart=\"1\" autorewind=\"0\"");
+	document.write(" animationatstart=\"0\" transparentatstart=\"0\" allowscan=\"1\"");
+	document.write(" enablecontextmenu=\"1\" clicktoplay=\"0\" invokeurls=\"1\"");
+	document.write(" defaultframe=\"datawindow\" >");
+	document.write(" </embed>");
+	document.write("<\/object>");
+}
+
+
+
+</script>
+</head>
+
+<body>
+
+<div class="tabber" id="tab2">
+	 {$tabes}
+</div>
+
+
+<div class="tabber" id="tab3">
+	 <div class="tabbertab" id="result">
+	  <h2>专辑列表</h2>
+     </div>
+</div>
+
+
+
+<div id="player">
+
+<h3 id="songInfo"></h3>
+
+<script type="text/javascript">players();</script>
+
+<script type="text/javascript">var total=14;var arr_ids = new Array(145200,145201,145202,145203,145204,145205,145206,145207,145208,145209,145210,145211,145212,145213,0);</script>
+
+
+</div>
+
+<script type="text/javascript">
+
+/* Since we specified manualStartup=true, tabber will not run after
+   the onload event. Instead let's run it now, to prevent any delay
+   while images load.
+*/
+
+tabberAutomatic(tabberOptions);
+
+</script>
+</body>
+</html>

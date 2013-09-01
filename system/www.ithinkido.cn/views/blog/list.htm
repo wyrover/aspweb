@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>日志列表</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="system/styles/default3.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="system/scripts/jquery.js"></script>
+
+
+
+<script language="vbscript"> 
+Function str2asc(strstr) 
+str2asc = hex(asc(strstr)) 
+End Function 
+Function asc2str(ascasc) 
+asc2str = chr(ascasc) 
+End Function 
+</script> 
+
+<script language="javascript"> 
+/*这里开始时UrlEncode和UrlDecode函数*/ 
+function UrlEncode(str){ 
+   var ret=""; 
+   var strSpecial="!\"#$%&'()*+,/:;<=>?[]^`{|}~%"; 
+   for(var i=0;i<str.length;i++){ 
+   var chr = str.charAt(i); 
+     var c=str2asc(chr); 
+     if(parseInt("0x"+c) > 0x7f){ 
+       ret+="%"+c.slice(0,2)+"%"+c.slice(-2); 
+     }else{ 
+       if(chr==" ") 
+         ret+="+"; 
+       else if(strSpecial.indexOf(chr)!=-1) 
+         ret+="%"+c.toString(16); 
+       else 
+         ret+=chr; 
+     } 
+   } 
+   return ret; 
+} 
+function UrlDecode(str){ 
+   var ret=""; 
+   for(var i=0;i<str.length;i++){ 
+   var chr = str.charAt(i); 
+     if(chr == "+"){ 
+       ret+=" "; 
+     }else if(chr=="%"){ 
+     var asc = str.substring(i+1,i+3); 
+     if(parseInt("0x"+asc)>0x7f){ 
+       ret+=asc2str(parseInt("0x"+asc+str.substring(i+4,i+6))); 
+       i+=5; 
+     }else{ 
+       ret+=asc2str(parseInt("0x"+asc)); 
+       i+=2; 
+     } 
+     }else{ 
+       ret+= chr; 
+     } 
+   } 
+   return ret; 
+} 
+</script>
+
+
+<script language="javascript">
+
+
+	function SelectAllCheckboxes(theBox){
+	
+	
+	xState=theBox.checked;	
+
+		elm=theBox.form.elements;
+		for(i=0;i<elm.length;i++)
+		if(elm[i].type=="checkbox" && elm[i].id!=theBox.id)
+			{
+			//elm[i].click();
+			if(elm[i].checked!=xState)
+			elm[i].click();
+			//elm[i].checked=xState;
+			}
+	}
+
+	
+	function HighlightRow(chkB)	{
+	
+	xState=chkB.checked;	
+	if(xState)
+		{chkB.parentElement.parentElement.style.backgroundColor='lightcoral';  // grdEmployees.SelectedItemStyle.BackColor
+		 chkB.parentElement.parentElement.style.color='white'; // grdEmployees.SelectedItemStyle.ForeColor
+		}else 
+		{chkB.parentElement.parentElement.style.backgroundColor='white'; //grdEmployees.ItemStyle.BackColor
+		 chkB.parentElement.parentElement.style.color='black'; //grdEmployees.ItemStyle.ForeColor
+		}
+	}
+	// -->
+
+
+	function delAll()
+	{
+		
+		document.getElementById('myForm').action="index.asp?/blog/del"
+		document.getElementById('myForm').submit();
+	
+	}
+
+function search()
+{
+	document.location.href = "index.asp?/blog/list/" + document.getElementById("word").value;
+}
+
+
+
+function createcustomhomepage()
+{
+	$.get(
+		"index.asp?/host/createcustomhomepage/" + {$custom_home_page}, 
+		function(result) {			
+			$("#progress").html(result);			
+		}
+	);	
+}
+
+
+		</script>
+
+
+
+
+
+
+
+</head>
+
+<body>
+<form id="myForm" method="post">
+<cms:list>
+	<sql>SELECT A.*, B.BlogCategoryName, C.Author as authorname, (SELECT COUNT(ID) FROM blog_comments WHERE BlogID = A.ID) AS CommentNum FROM ((blog_blogs A  INNER JOIN blog_categories B ON B.ID = A.BlogCategoryID) INNER JOIN blog_author C ON C.ID = A.Author) WHERE A.ID = {$custom_home_page}</sql>
+	<template>
+		<tr>				
+		<td><a href="index.asp?/blog/add/$ID$">编辑</a></td>		
+		<td><a href="$getViewURL(PostTime, Alias, ID)$" target="_blank">$Title$</a></td>
+		<td><a href="javascript:createcustomhomepage();">生成首页</a></td>
+		</tr>
+	</template>
+	<cache>1</cache>
+</cms:list>
+<p>
+<input type="text" accesskey="q" name="Word" id="Word" value="" />
+<input type="button" id="btnSearch" name="btnSearch" value="&nbsp;&nbsp;搜索&nbsp;&nbsp;" onclick="search();"/><br />
+
+<a href="javascript:delAll();">删除？</a>
+<table width="100%">
+<tr>
+	<td><input name="alldel" type="checkbox" id="alldel" value="on" onclick="javascript:SelectAllCheckboxes(this);"></td>
+	<td>&nbsp;</td>	
+	<td>标题</td>
+	<td>作者</td>
+	<td>发布时间</td>
+	<td>类别</td>				
+	<td>评论数</td>
+</tr>
+<cms:list>
+	<sql>SELECT TOP {$pagesize} A.*, B.BlogCategoryName, C.Author as authorname, (SELECT COUNT(ID) FROM blog_comments WHERE BlogID = A.ID) AS CommentNum FROM ((blog_blogs A  INNER JOIN blog_categories B ON B.ID = A.BlogCategoryID) INNER JOIN blog_author C ON C.ID = A.Author) {$tableB} ORDER BY A.ID DESC</sql>
+	<template>
+		<tr>		
+		<td><input name="ID" type="checkbox" id="ID" value="$ID$" onclick="javascript:HighlightRow(this);"></td>
+		<td><a href="index.asp?/blog/add/$ID$">编辑</a></td>		
+		<td><a href="$getViewURL(PostTime, Alias, ID)$" target="_blank">$Title$</a></td>
+		<td>$authorname$</td>
+		<td>$PostTime$</td>
+		<td>$BlogCategoryName$</td>				
+		<td>$CommentNum$</td>
+		</tr>
+	</template>
+	<cache>1</cache>
+</cms:list>
+
+
+</table>
+<div class="navigation">{$page1}</div>
+</form>
+</body>
+</html>

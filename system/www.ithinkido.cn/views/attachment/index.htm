@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="system/styles/admin.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body class="attachmentBody" style="background-color:#FAFAFA;">
+
+<script>
+ function MSave(o){
+  if (o.checked) {
+    document.forms["frm"].action="index.asp?/attachment/upload/1"
+  }
+  else
+  {
+    document.forms["frm"].action="index.asp?/attachment/upload/0"
+  }
+ }
+</script>
+<form id="frm" name="frm" enctype="multipart/form-data" method="post" action="index.asp?/attachment/upload/0">
+<p>上传图片、影音及其它类型的文件: </p>
+<input name="File" type="File" size="40" style="height: 21px;">&nbsp;
+<input type="Submit" name="Submit" value="确定上传" class="button">
+</form>
+
+</body>
+</html>

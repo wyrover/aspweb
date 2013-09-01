@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<title></title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="system/styles/default3.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="system/scripts/jquery.js"></script> 
+ 
+
+
+
+<script type="text/javascript">
+var oInterval="";
+i = 1;
+NUM = 0;
+function createindex()
+{
+	i = $("#txtBegin").val();
+	oInterval=window.setInterval("fnRefresh()", 500);			
+	$("#progress").html("开始生成......");					
+		
+	/*
+	$.get(
+		"index.asp?/host/createpagelist", 
+		function(result) {
+			
+			alert('生成首页成功！');
+			window.clearInterval(oInterval);
+			$("#progress").html("生成完毕！");	
+		}
+	);
+	
+
+	*/
+}
+
+function createhomepage()
+{
+	$.get(
+		"index.asp?/host/createpage2/1", 
+		function(result) {			
+			$("#progress").html(result);			
+		}
+	);	
+}
+
+
+function createcustomhomepage()
+{
+	$.get(
+		"index.asp?/host/createcustomhomepage/" + document.getElementById('txtblogId').value, 
+		function(result) {			
+			$("#progress").html(result);			
+		}
+	);	
+}
+
+
+function fnRefresh()
+{
+	
+	$.get(
+		"index.asp?/host/createpage2/" + i, 
+		function(result) {			
+			$("#progress").html(result);			
+		}
+	);	
+
+	if (i == $("#txtEnd").val())
+	{
+		window.clearInterval(oInterval);
+		$("#progress").html("生成完毕！");
+	}
+
+	i++;
+	
+}
+
+function createblogcontent()
+{
+	i = 1;
+	NUM = Math.ceil($("#txtEndBlogID").val() / 100);	
+	oInterval=window.setInterval("fnRefresh2()", 500);			
+	$("#progress").html("开始生成......");	
+}
+
+function fnRefresh2()
+{
+
+	$.get(
+		"index.asp?/host/createblogcontent/" + i, 
+		function(result) {			
+			$("#progress").html(result);				
+		}
+	);
+
+
+	if (i == NUM)
+	{
+		window.clearInterval(oInterval);
+		//$("#progress").html("生成完毕！");
+	}
+
+	i++;
+	
+}
+
+function createtagarchive()
+{
+	i = 1;
+	NUM = Math.ceil($("#txtEndTagID").val() / 100);	
+	oInterval=window.setInterval("fnRefresh3()", 500);			
+	$("#progress").html("开始生成......");	
+}
+
+function fnRefresh3()
+{
+
+	$.get(
+		"index.asp?/host/create_tag_archive/" + i, 
+		function(result) {			
+			$("#progress").html(result);				
+		}
+	);
+
+
+	if (i == NUM)
+	{
+		window.clearInterval(oInterval);
+		//$("#progress").html("生成完毕！");
+	}
+
+	i++;
+	
+}
+
+function createmontarchive()
+{
+	$.get(
+		"index.asp?/host/createArchiveByMonth", 
+		function(result) {			
+			$("#progress").html(result);				
+		}
+	);
+}
+
+function createarchivebycategory(id)
+{
+	$.post(
+		"index.asp?/host/createArchiveByCategory", 
+		{ id: id, ename: $("#txtEname" + id).val() }, 
+		function(result) {			
+			$("#progress").html(result);				
+		}
+	);
+}
+
+function createrss2()
+{
+	$.get(
+		"index.asp?/host/createFeed",
+		function(result) {
+			$("#progress").html(result);
+		}
+	);
+}
+
+function createRss2ByCategory()
+{
+	i = 1;
+	NUM = Math.ceil($("#txtEndCategoryID").val());	
+	oInterval=window.setInterval("fnRefresh4()", 500);			
+	$("#progress").html("开始生成......");	
+}
+
+function fnRefresh4()
+{
+		$.get(
+		"index.asp?/host/createFeed/" + i, 
+		function(result) {			
+			$("#progress").html(result);				
+		}
+	);
+
+
+	if (i == NUM)
+	{
+		window.clearInterval(oInterval);
+		//$("#progress").html("生成完毕！");
+	}
+
+	i++;
+}
+
+function createnewsite()
+{
+	$.post(
+		"index.asp?/host/newsite", 
+		{ site: $("#txtNewSite").val() }, 
+		function(result) {			
+			$("#progress").html(result);				
+		}
+	);
+}
+</script>
+
+</head>
+
+<body>
+
+<input type="text" id="txtblogId" value="{$custom_home_page}" />
+<input type="button" id="btnCreateCustomHomePage" value="生成自定义首页" onclick="createcustomhomepage();" />
+
+<input type="button" id="btnCreateHomePage" value="生成首页" onclick="createhomepage();" />
+
+
+起始页：<input type="text" id="txtBegin" value="1" />
+尾页：<input type="text" id="txtEnd" value="{$pagecount}" />
+<input type="button" id="btnCreateIndex" value="生成首页及各分页页面" onclick="createindex();" />
+<div id="progress"></div>
+
+内容页起始ID：<input type="text" id="txtBeginBlogID" value="{$BeginBlogID}" />
+内容页结束ID：<input type="text" id="txtEndBlogID" value="{$EndBlogID}" />
+<input type="button" id="btnCreateBlogContent" value="生成Blog内容页" onclick="createblogcontent();" />
+
+
+Tag起始ID：<input type="text" id="txtBeginTagID" value="{$BeginTagID}" />
+Tag结束ID：<input type="text" id="txtEndTagID" value="{$EndTagID}" />
+<input type="button" id="btnCreateTagArchive" value="生成Tag索引页" onclick="createtagarchive();" />
+
+
+<input type="button" id="btnCreateMonthArchive" value="创建月存档" onclick="createmontarchive();" /><br />
+
+<table>
+<tr>
+	<td>类别名称</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<cms:list><sql>select * from blog_categories order by Sort ASC</sql>
+<template>
+	<tr>
+		<td><input type="text" id="txtCategory$ID$" value="$BlogCategoryName$" /></td>
+		<td><input type="text" id="txtEname$ID$" value="$EName$" /><td>				
+		<td><input type="button" value="生成分类存档" onclick="createarchivebycategory($ID$)" /> </td></tr>
+</template>
+<cache>1</cache>
+</cms:list>
+</table>
+
+<br />
+
+<input type="button" id="btnCreateRss2" value="创建RSS2" onclick="createrss2();" />
+
+分类起始ID：<input type="text" id="txtBeginCategoryID" value="{$BeginCategoryID}" />
+分类结束ID：<input type="text" id="txtEndCategoryID" value="{$EndCategoryID}" />
+<input type="button" id="btnCreateRSS2ByCategory" value="生成分类RSS2" onclick="createRss2ByCategory();" />
+
+
+<br />
+<input type="text" id="txtNewSite" />
+<input type="button" id="btnCreateNewSite" value="创建新站点" onclick="createnewsite();" />
+
+</body>
+</html>

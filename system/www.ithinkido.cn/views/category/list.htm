@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>分类管理</title>
+
+<link href="system/styles/admin.css" rel="stylesheet" type="text/css" />
+<link type="text/css" href="system/styles/wforms.css" rel="stylesheet" />
+<link type="text/css" href="system/styles/tabber.css" rel="stylesheet" media="screen">
+
+<script type="text/javascript" src="system/scripts/jquery.js"></script> 
+<script type="text/javascript" src="system/scripts/wforms.js"></script> 
+<script type="text/javascript" src="system/scripts/cmxform.js"></script>
+<script type="text/javascript" src="system/scripts/tabber.js"></script>
+
+<script type="text/javascript">
+function updatecategory(id)
+{	
+	$.post(
+		'index.asp?/ajax/updatecategory', 
+		{id: id, name: $("#txtCategory" + id).val(), ename: $("#txtEname" + id).val(), order: $("#txtOrder" + id).val()}, 
+		function(result) {
+			
+			if (result == "1") {
+				alert('更新成功');
+			}			
+		}
+	);
+}	
+
+function addcategory()
+{
+	
+	var parentId;
+	if (document.getElementById('chkIsRoot').checked == true)
+	{
+		parentId = 0;		
+	}
+	else
+	{		
+		parentId = $("#ddlCategories").val();		
+	}
+
+	$.post(
+		'index.asp?/ajax/addcategory', 
+		{ name: $("#txtCategory").val(), ename: $("#txtEname").val(), parentId: parentId, order: $("#txtOrder").val()}, 
+		function(result) {
+			
+			if (result == "1") {
+				alert('添加成功');
+			}			
+		}
+	);
+}
+</script>
+</head>
+<body>
+
+
+<div class="tabber">
+
+     <div class="tabbertab">
+	  <h2>文章模块</h2>
+	  <p>
+	  
+	  <form name="frm" action="index.asp?/home/submit" method="post" class="cmxform">
+	
+<fieldset>
+	<legend>类别管理</legend>
+
+	<div class="CNLTreeMenu" id="CNLTreeMenu2">
+	{$category_list}
+	</div>
+
+
+	
+		<ol>
+			<li><b>新增类别</b></li>
+			<li><label>中文名：</label><input type="text" id="txtCategory" value="" /></li>
+			<li><label>英文名：</label><input type="text" id="txtEname" value="" /></li>
+			<li><label>根节点：</label><input type="checkbox" id="chkIsRoot"  /></li>
+			<li><label>类别：</label><select name="ddlCategories" id="ddlCategories">{$categories}</select></li>
+			<li><label>排序：</label><input type="text" id="txtOrder" value="" /></li>
+			<input type="button" value="新增" onclick="addcategory()" /></li>
+	
+		</ol>
+
+</fieldset>		   
+	
+
+</form>
+	  
+	  
+	  </p>
+     </div>
+
+
+     <div class="tabbertab">
+	  <h2>生成列表</h2>
+	  <p>
+	  <br>
+	  <ul>
+	  <cms:list>
+		<sql>SELECT * FROM blog_categories WHERE ParentID = 0 ORDER BY ID ASC</sql>
+		<template><li>$BlogCategoryName$ $getBlogListByCategory(ID)$</li>
+		</template>
+		<cache>20</cache>
+	  </cms:list>
+	  <ul>
+	  <br>
+	  </p>
+     </div>
+
+
+     <div class="tabbertab">
+	  <h2>Tab 3</h2>
+	  <p>Tab 3 content.</p>
+     </div>
+
+</div>
+
+
+</body>
+</html>
+
+		
+		

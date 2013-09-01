@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="utf-8" />
+<meta name="keywords" content="web2.0,rblog,Wyrover.Cn" />
+<meta name="description" content="web2.0,rblog,Wyrover.Cn" />
+<meta name="copyright" content="Wyrover.Cn" />
+<meta name="author" content="wyrover" />
+<link rel="shortcut icon" href="favicon.ico" >
+<link rel="alternate" title="Wyrover.Cn" href="http://feeds.feedburner.com/wyrover" type="application/rss+xml" />
+<link rel="stylesheet" href="<cms:function>GetBaseURL()</cms:function>skins/bluefeel/style.css" type="text/css" media="all"  />
+<link type="text/css" rel="stylesheet" href="<cms:function>GetBaseURL()</cms:function>styles/code/SyntaxHighlighter.css" />
+
+<script type="text/javascript">
+	var postminchars = parseInt("4");
+	var postmaxchars = parseInt("300");
+</script>
+<script type="text/javascript" src="include/common.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/jquery.js"></script>
+<title>Links  - Powered By Rblog</title>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$(".commentlist").find("li").each(function(i) {		
+		if (i % 2 == 0) {
+			$(this).addClass("alttwo");
+		}
+	});	
+	
+});
+</script>
+</head>
+<body>
+<div id="outmain">
+<cms:file>$header.htm$</cms:file>
+
+
+<div id="page">
+  <div id="wrap">
+
+<h2 class="title">Links</h2>
+
+
+
+<ul class="linkover">
+
+
+	<cms:list>
+		<sql>SELECT * FROM blog_links ORDER BY Sort</sql>
+		<template><li class="onelink"><a href="$URL$" target="_blank">$Name$</a><br />
+	$URL$</li></template>
+		<cache>1</cache>
+	</cms:list> 
+
+	
+
+</ul>
+
+  </div>
+
+
+
+
+
+  <cms:file>$sidebar1.htm$</cms:file>
+</div>
+
+
+
+<cms:file>$footer.htm$</cms:file>
+</body>
+
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>个人信息</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="<cms:function>GetBaseURL()</cms:function>styles/default2.css" rel="stylesheet" type="text/css" />
+<link href="<cms:function>GetBaseURL()</cms:function>styles/tree/css4cnltreemenu.css" rel="stylesheet" type="text/css" />
+<link type="text/css" href="<cms:function>GetBaseURL()</cms:function>styles/wforms.css" rel="stylesheet" />
+<link type="text/css" href="<cms:function>GetBaseURL()</cms:function>styles/wforms-jsonly.css" rel="alternate stylesheet" 
+title="stylesheet activated by javascript" />
+<link rel="stylesheet" href="styles/thickbox.css" type="text/css" media="screen" />
+
+<style type="text/css">
+@import "styles/_library/cmxform.css";
+form.cmxform { width: 97%;	}	
+form.cmxform label { width: 80px; }
+form.cmxform label.preField { width: expression('4em'); min-width: 4em }
+form.cmxform fieldset fieldset { background: none; }	
+form.cmxform fieldset li {	
+	padding: 3px 10px 3px;
+	/*background: url(images/form/cmxform-divider.gif) left bottom repeat-x;*/
+}
+</style>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/jquery.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/js4cnltreemenu.js"></script> 
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/wforms.js"></script> 
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/cmxform.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/thickbox.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/utility.js"></script>
+<script type="text/javascript" src="<cms:function>GetBaseURL()</cms:function>scripts/login.js"></script>
+
+</head>
+<body>
+<div id="outer">
+	
+				<form name="frm" action="<cms:label>$action$</cms:label>" method="post" class="cmxform">
+	
+<fieldset>
+	<legend>个人信息</legend>
+	<ol>
+		<li><label>密码：</label><input type="text" id="txtPassword1" name="txtPassword1" class="required"  /></li>
+		<li><label>确认密码：</label><input type="text" id="txtPassword2" name="txtPassword2" class="required" /></li>
+		
+		
+		
+	<ol>
+	<p style="text-align:center;"> <input type="submit" class="userbutton" id="btnSave" name="btnSave" value="提交" />
+	<input name="ReturnButton" type="button" class="userbutton" value="返回" accesskey="Q" onClick="history.go(-1)"/></p>
+
+</fieldset>		   
+	
+
+</form>
+				
+	
+</div>
+</body>
+</html>
+
+		
+		

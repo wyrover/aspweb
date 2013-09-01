@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>写日志</title>
+<link href="system/styles/admin.css" rel="stylesheet" type="text/css" />
+<link href="system/styles/wforms.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="system/scripts/jquery.js"></script>
+<script type="text/javascript" src="system/scripts/wforms.js"></script> 
+<script type="text/javascript" src="system/scripts/cmxform.js"></script>
+<script type="text/javascript" src="system/FCKeditor/fckeditor.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$("#tags").hide();
+	$("#tags").find("li > a").each(function(i) {		
+		$(this).click(function() {			
+			var temp = $("#txtTags").val();
+			if (temp != "") {
+				temp = temp + " " + $(this).html();
+			} else {
+				temp = $(this).html();
+			}
+			$("#txtTags").val(temp);
+			return false;
+		});
+	});
+
+	$('#ddlAttributes').val({$attributes});
+	
+});
+
+function showtags()
+{
+	$("#tags").toggle("slow");
+	return false;
+}
+
+function ajaxsubmit()
+{	
+	var oEditor = FCKeditorAPI.GetInstance('txtContent');	
+	var oEditor2 = FCKeditorAPI.GetInstance('txtIntroduce');	
+	
+	$.post(
+		"{$action2}", 
+		{ txtContent: oEditor.GetXHTML(true), txtIntroduce: oEditor2.GetXHTML(true)  }, 
+		function(result) {					
+			if (result == "1") {
+				alert("更新成功");
+			}	
+			
+		}
+	);	
+}
+
+
+function AutoIntro() {
+		FCKeditorAPI.GetInstance('txtIntroduce').SetHTML(FCKeditorAPI.GetInstance('txtContent').GetHTML().replace(/<[^>]+>/g, "").substring(0,200));     //FCK会自动处理未闭合的标签，我们不用多管它。要是标签被切了一半显示出来了自己编辑下就好。
+	}
+
+</script>
+
+</head>
+<body style="width: 96%">
+<div id="outer">
+	
+<form name="frm" action="{$action}" method="post" class="cmxform">
+	
+<fieldset>
+	<legend>写日志</legend>
+	<ol>
+		<li><label>标题：</label> <input type="text" name="txtTitle" class="required" id="title" value="{$Title}" maxlength="50" style="width: 250px;" /><label for="chkIsTop">置顶</label><input type="checkbox" id="chkIsTop" name="chkIsTop" /></li>
+		<li><label>类别：</label> <select name="ddlCategories" id="ddlCategories">{$categories}</select>
+			
+			 
+		</li>		
+		<li><label>属性：</label> <select name="ddlAttributes" id="ddlAttributes">
+			  <option value="1" selected>公开日志</option>
+			  <option value="2">隐藏日志</option>
+			  <option value="0">日志草稿</option></select></li>
+		
+		<li><label>发布人：</label><select name="ddlauthor" id="ddlauthor">{$author}</select></li>
+		<li><label>Tags：</label><input name="txtTags" id="txtTags" type="text" class="required" value="{$Tags}" style="width: 350px;"  />(tag之间用空格分割)<label><a href="#" onclick="showtags();">已使用的Tag</a></label></li>
+		<li><ul id="tags"><cms:list><sql>SELECT * FROM blog_tags ORDER BY tag_name ASC</sql><template><li><a href="#">$tag_name$</a>  </li></template><cache>1</cache></cms:list></ul><div class="clear"></div></li>
+		<li><label>别名：</label><input type="text" id="txtAlias" name="txtAlias" value="{$Alias}" style="width: 350px;" />.htm</li>		
+		<li><iframe border="0" src="index.asp?/attachment/index" frameBorder="0" width="80%" scrolling=no height="80px"></iframe></li>
+		<li >{$message}</li>		
+		<li><label>内容摘要：</label><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'" {$ShowIntroduce}/>编辑内容摘要</label>&nbsp;&nbsp;<a href="javascript:AutoIntro();">自动生成摘要>></a><div id="Div_Intro" {$ShowIntroduce2}>{$introduce}</div></li>	
+		<!--<li><label>引用通告：</label><input type="text" id="txtAlias" name="txtAlias" value="{$Alias}" style="width: 500px;" /></li>		-->
+	<ol>
+	<p style="text-align:center; margin-top: 8px;">
+	<input type="button" class="button" onclick="ajaxsubmit();" value="Ajax保存">
+	<input type="submit" class="button" id="btnSaveBlog" name="btnSaveBlog" value="&nbsp;&nbsp;保存&nbsp;&nbsp;" />
+	<input name="btnSaveDraft" type="submit" class="button" value="保存为草稿" onclick="$('#ddlAttributes').val(0);" />
+	<input name="ReturnButton" type="button" class="button" value="返回" accesskey="Q" onClick="history.go(-1)"/></p>
+
+</fieldset>
+</form>
+</div>
+</body>
+</html>

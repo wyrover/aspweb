@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Tag列表</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="system/styles/default2.css" rel="stylesheet" type="text/css" />
+<link href="system/styles/tree/css4cnltreemenu.css" rel="stylesheet" type="text/css" />
+<link type="text/css" href="system/styles/wforms.css" rel="stylesheet" />
+<link type="text/css" href="system/styles/wforms-jsonly.css" rel="alternate stylesheet" 
+title="stylesheet activated by javascript" />
+<link rel="stylesheet" href="styles/thickbox.css" type="text/css" media="screen" />
+
+<style type="text/css">
+@import "styles/_library/cmxform.css";
+form.cmxform { width: 97%;	}	
+form.cmxform label { width: 80px; }
+form.cmxform label.preField { width: expression('4em'); min-width: 4em }
+form.cmxform fieldset fieldset { background: none; }	
+form.cmxform fieldset li {	
+	padding: 3px 10px 3px;
+	/*background: url(images/form/cmxform-divider.gif) left bottom repeat-x;*/
+}
+</style>
+<script type="text/javascript" src="system/scripts/jquery.js"></script>
+<script type="text/javascript" src="system/scripts/js4cnltreemenu.js"></script> 
+<script type="text/javascript" src="system/scripts/wforms.js"></script> 
+<script type="text/javascript" src="system/scripts/cmxform.js"></script>
+<script type="text/javascript" src="system/scripts/thickbox.js"></script>
+<script type="text/javascript" src="system/scripts/utility.js"></script>
+<script type="text/javascript" src="system/scripts/login.js"></script>
+<script type="text/javascript">
+function updatelink(id)
+{	
+	$.post(
+		'index.asp?/ajax/updatelink', 
+		{id: id, name: $("#txtName" + id).val(), url: $("#txtURL" + id).val(), order: $("#txtOrder" + id).val()}, 
+		function(result) {
+			
+			if (result == "1") {
+				alert('更新成功');
+				document.location.replace('index.asp?/manage/link_list');
+			}			
+		}
+	);
+}	
+
+function addlink()
+{
+	$.post(
+		'index.asp?/ajax/addlink', 
+		{ name: $("#txtName").val(), url:$("#txtURL").val(), order: $("#txtOrder").val()}, 
+		function(result) {
+			
+			if (result == "1") {
+				alert('添加成功');
+				document.location.replace('index.asp?/manage/link_list');
+			}			
+		}
+	);
+}
+</script>
+</head>
+<body>
+<div id="outer">
+	
+			
+				<form name="frm" action="index.asp?/home/submit" method="post" class="cmxform">
+	
+<fieldset>
+	<legend>Tag列表</legend>
+	<table>
+	<tr>
+		<td>名称</td><td>数量</td><td>&nbsp;</td>
+	</tr>
+	<cms:list><sql>SELECT * FROM blog_tags ORDER BY tag_id ASC</sql>
+	<template>
+		<tr>
+			<td><input type="text" id="txtTagName$tag_id$" value="$tag_name$" /></td>
+			<td><input type="text" id="txtCount$tag_id$" value="$tag_count$" style="width: 300px;" /></td>			
+			<td><input type="button" value="更新" onclick="updatelink($tag_id$)" />  <a  href="?/manage/tag_list/del/$tag_id$">删除</a></td></tr>
+	</template>
+	<cache>1</cache>
+	</cms:list>
+	
+	</table>
+	
+
+</fieldset>		   
+	
+
+</form>
+				
+
+</div>
+</body>
+</html>
+
+		
+		

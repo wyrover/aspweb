@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>上传文件</title><link rel="stylesheet" href="Include/admin_style.css"><style type="text/css">
+<!--
+body {    margin-left: 0px; 
+    margin-top: 0px;
+}
+-->
+</style>
+
+<script type="text/javascript">
+function upload(type,obj)
+{
+ if (type=="img")
+ {
+  var arr = showModalDialog("?/upload/index3/img", "", "dialogWidth:25em; dialogHeight:5em; status:0;help:0;");
+  if (arr!=null)
+  {
+	obj.value = arr;  
+	obj.focus();
+	}
+ }
+ if (type=="soft")
+ {
+  var arr = showModalDialog("?/upload/index3/soft", "", "dialogWidth:25em; dialogHeight:5em; status:0;help:0;");
+  if (arr!=null)
+  {
+	obj.value = arr;  
+	obj.focus();
+	}
+  }
+}
+</script>
+</head><body  class='tdbg'>
+
+<input name="hotShowImage" type="text" class="dataInput" onFocus="this.select()" value="Images/nonePicture.jpg"> 
+[<a href="#" onClick="upload('img',document.getElementById('hotShowImage'));">图片上传</a>]
+
+</body></html>

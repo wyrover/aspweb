@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<title>后台-评论列表</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="system/styles/default3.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="system/scripts/jquery.js"></script>
+<script type="text/javascript" src="system/scripts/form.js"></script>
+<script type="text/javascript">
+var oInterval="";
+i = 1;
+function createindex()
+{
+	i = $("#txtBegin").val();
+	oInterval=window.setInterval("fnRefresh()", 500);			
+	$("#progress").html("开始生成......");					
+		
+	/*
+	$.get(
+		"index.asp?/host/createpagelist", 
+		function(result) {
+			
+			alert('生成首页成功！');
+			window.clearInterval(oInterval);
+			$("#progress").html("生成完毕！");	
+		}
+	);
+	
+
+	*/
+}
+
+function fnRefresh()
+{
+	
+	$.get(
+		"index.asp?/host/createpage2/" + i, 
+		function(result) {			
+			$("#progress").html(result);			
+		}
+	);	
+
+	if (i == $("#txtEnd").val())
+	{
+		window.clearInterval(oInterval);
+		$("#progress").html("生成完毕！");
+	}
+
+	i++;
+	
+}
+</script>
+
+<script language="javascript">
+
+
+	function SelectAllCheckboxes(theBox){
+	
+	
+	xState=theBox.checked;	
+
+		elm=theBox.form.elements;
+		for(i=0;i<elm.length;i++)
+		if(elm[i].type=="checkbox" && elm[i].id!=theBox.id)
+			{
+			//elm[i].click();
+			if(elm[i].checked!=xState)
+			elm[i].click();
+			//elm[i].checked=xState;
+			}
+	}
+
+	
+	function HighlightRow(chkB)	{
+	
+	xState=chkB.checked;	
+	if(xState)
+		{chkB.parentElement.parentElement.style.backgroundColor='lightcoral';  // grdEmployees.SelectedItemStyle.BackColor
+		 chkB.parentElement.parentElement.style.color='white'; // grdEmployees.SelectedItemStyle.ForeColor
+		}else 
+		{chkB.parentElement.parentElement.style.backgroundColor='white'; //grdEmployees.ItemStyle.BackColor
+		 chkB.parentElement.parentElement.style.color='black'; //grdEmployees.ItemStyle.ForeColor
+		}
+	}
+	// -->
+
+
+	function delAll()
+	{
+		
+		document.getElementById('myForm').action="index.asp?/comment/del"
+		document.getElementById('myForm').submit();
+	
+	}
+		</script>
+
+</head>
+
+<body>
+<form id="myForm" method="post">
+<a href="javascript:delAll();">删除？</a>&nbsp;&nbsp;<a href="#">重建页面</a>
+<table width="100%">
+<tr>
+	<td><input name="alldel" type="checkbox" id="alldel" value="on" onclick="javascript:SelectAllCheckboxes(this);"></td>
+	
+	<td>内容</td>
+	<td>作者</td>
+	<td>Email</td>
+	<td>WebSite</td>
+	<td>发布时间</td>
+	<td>IP</td>
+	
+</tr>
+<cms:list>
+	<sql>SELECT TOP {$pagesize} A.* FROM blog_comments A  {$tableB} ORDER BY A.ID DESC</sql>
+	<template>
+		<tr>		
+		<td><input name="ID" type="checkbox" id="ID" value="$ID$" onclick="javascript:HighlightRow(this);"></td>
+		
+		<td>$Content$</td>
+		<td>$author$</td>
+		<td>$Email$</td>
+		<td>$website$</td>
+		<td>$PostTime$</td>
+	
+		
+		</tr>
+	</template>
+	<cache>5</cache>
+</cms:list>
+
+
+</table>
+<div class="navigation">{$page1}</div>
+</form>
+</body>
+</html>

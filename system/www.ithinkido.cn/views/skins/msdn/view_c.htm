@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<topictype value="TOPIC"/>
+<title>MySQL 分区</title>
+<LINK rel="stylesheet" type="text/css" href="<cms:function>GetBaseURL()</cms:function>skins/msdn/wwhelp.css">
+<SCRIPT SRC="<cms:function>GetBaseURL()</cms:function>skins/msdn/wwhelp.js"></SCRIPT>
+</head>
+<body leftmargin=0 topmargin=0>
+<cms:list>
+	<sql>SELECT A.*, B.BlogCategoryName, C.Author AS authorname, (SELECT COUNT(ID) FROM blog_comments WHERE BlogID = A.ID) AS CommentCount FROM ((blog_blogs A  INNER JOIN blog_categories B ON B.ID = A.BlogCategoryID) INNER JOIN blog_author C ON C.ID = A.Author) WHERE A.ID = {$blogId}</sql>
+	<template>
+		<table border=0 width="100%" bgcolor="lightblue" class="banner" cellspacing="3">
+		<tr><td valign="center">
+		<span class="projectname">$BlogCategoryName$</span>
+		</td></tr><tr><td>
+		<span class="topicname">$Title$</span>
+		</td></tr>
+		</table>
+		<div class="contentpane"><br>
+			$iHTMLEncode(Content)$
+			<br>			
+		</div>
+		<p>Tags:&nbsp;&nbsp;&nbsp;&nbsp;$FormatTag(Tags)$</p>
+		<hr>
+		<small>Last Updated: <i>$PostTime$</i></small>		
+		<small>view: <i><script language="javascript" src="<cms:function>GetBaseURL()</cms:function>index.asp?/ajax/gethits/$id$" type="text/javascript"></script></i></small>		 
+</template>
+<cache>1</cache>
+</cms:list>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shCore.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushCSharp.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushPhp.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushJScript.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushVb.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushSql.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushXml.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushDelphi.js"></script>
+<script class="javascript" src="<cms:function>GetBaseURL()</cms:function>skins/msdn/shBrushPython.js"></script>
+<script class="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+</body>
+</html>
